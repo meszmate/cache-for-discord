@@ -14,15 +14,9 @@ go get github.com/bwmarrin/discordgo
 package main
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
-	"net/http"
 	"os"
 	"os/signal"
-	"sort"
-	"strconv"
-	"strings"
 	"sync"
 	"syscall"
 
@@ -32,7 +26,6 @@ import (
 var shardSessions = make([]*discordgo.Session, 0)
 var cache *dcache.State = NewState()
 func main() {
-	conn, _ = pgxpool.New(context.Background(), "postgresql://postgres:test@localhost:5432/matebot")
 	for i := 0; i < shardCount; i++ {
 		cache.CreateNewShard(i)
 		dg, err := discordgo.New(fmt.Sprintf("Bot %v", Token))
@@ -144,7 +137,7 @@ func wsHandleGuildUpdate(s *discordgo.Session, m *discordgo.GuildUpdate) {
     fmt.Println(err.Error())
   }
   // after update in the cache
-	cache.Shards[s.ShardID].GuildAdd(m.Guild)
+  cache.Shards[s.ShardID].GuildAdd(m.Guild)
 }
 ```
 
