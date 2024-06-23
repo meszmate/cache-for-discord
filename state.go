@@ -1,4 +1,4 @@
-package cache
+package dcache
 
 import (
 	"errors"
