@@ -1,5 +1,5 @@
 # cache-for-discord
-A better cache for discord, this file is similar to the [discordgo](github.com/bwmarrin/discordgo) state.go file
+A better cache for discord, this file is similar to the [discordgo](https://github.com/bwmarrin/discordgo) state.go file
 
 ## Installation
 Download the state.go file or use these commands:
