@@ -69,7 +69,7 @@ func main() {
 	}
 }
 
-// discord is using lazy loading for guilds, so add to the state if the guild is available
+// discord is using lazy loading for guilds, so add to the state if the guild is available or you can use the ready event
 func loadGuilds(s *discordgo.Session, m *discordgo.GuildCreate) {
 	cache.Shards[s.ShardID].GuildAdd(m.Guild)
 	err := s.RequestGuildMembers(m.Guild.ID, "", 0, "", false)
