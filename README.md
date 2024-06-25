@@ -25,6 +25,7 @@ import (
 )
 var shardSessions = make([]*discordgo.Session, 0)
 var cache *dcache.State = NewState()
+const ShardCount int = 3
 func main() {
 	for i := 0; i < shardCount; i++ {
 		cache.CreateNewShard(i)
@@ -71,7 +72,7 @@ func main() {
 // discord is using lazy loading for guilds, so add to the state if the guild is available
 func loadGuilds(s *discordgo.Session, m *discordgo.GuildCreate) {
 	cache.Shards[s.ShardID].GuildAdd(m.Guild)
-	err := shardSessions[s.ShardID].RequestGuildMembers(m.Guild.ID, "", 0, "", false)
+	err := s.RequestGuildMembers(m.Guild.ID, "", 0, "", false)
 	if err != nil{
 		fmt.Println(err.Error())
 	}
@@ -87,7 +88,7 @@ func MemberChunkHandler(s *discordgo.Session, m *discordgo.GuildMembersChunk) {
         }
         err := cache.Shards[s.ShardID].UserAdd(member.User)
         if err != nil {
-            fmt.Printf("Failed to add member %s (%s): %s\n", member.User.Username, member.User.ID, err)
+            fmt.Printf("Failed to add user %s (%s): %s\n", member.User.Username, member.User.ID, err)
         }
     }
 }
