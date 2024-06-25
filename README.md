@@ -86,7 +86,7 @@ func MemberChunkHandler(s *discordgo.Session, m *discordgo.GuildMembersChunk) {
         if err != nil {
             fmt.Printf("Failed to add member %s (%s): %s\n", member.User.Username, member.User.ID, err)
         }
-        err := cache.Shards[s.ShardID].UserAdd(member.User)
+        err := cache.UserAdd(member.User)
         if err != nil {
             fmt.Printf("Failed to add user %s (%s): %s\n", member.User.Username, member.User.ID, err)
         }
@@ -148,6 +148,6 @@ The number of the servers and users example
 usersnum := len(cache.Users)
 serversnum := 0
 for _, sh := range cache.Shards{
-  serversnum += len(sh.guildMap)
+  serversnum += len(sh.Guilds)
 }
 ```
