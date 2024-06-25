@@ -24,7 +24,7 @@ import (
 	"github.com/meszmate/cache-for-discord"
 )
 var shardSessions = make([]*discordgo.Session, 0)
-var cache *dcache.State = NewState()
+var cache *dcache.State = dcache.NewState()
 const ShardCount int = 3
 func main() {
 	for i := 0; i < shardCount; i++ {
