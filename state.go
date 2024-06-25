@@ -18,8 +18,8 @@ var ErrMessageIncompletePermissions = errors.New("message incomplete, unable to 
 type StateData struct {
 	sync.RWMutex
 	MaxMessageCount    int
-	guildMap   map[string]*discordgo.Guild
-	memberMap  map[string]map[string]*discordgo.Member
+	Guilds   map[string]*discordgo.Guild
+	Members  map[string]map[string]*discordgo.Member
 }
 type State struct {
 	sync.RWMutex
@@ -42,18 +42,18 @@ func (s *StateData) GuildAdd(guild *discordgo.Guild) error {
 	s.Lock()
 	defer s.Unlock()
 
-	if _, ok := s.memberMap[guild.ID]; !ok {
+	if _, ok := s.Members[guild.ID]; !ok {
 		members := make(map[string]*discordgo.Member)
-		s.memberMap[guild.ID] = members
+		s.Members[guild.ID] = members
 		
 	}
 	guild.Members = nil
-	if g, ok := s.guildMap[guild.ID]; ok {
+	if g, ok := s.Guilds[guild.ID]; ok {
 		*g = *guild
 		return nil
 	}
 
-	s.guildMap[guild.ID] = guild
+	s.Guilds[guild.ID] = guild
 
 	return nil
 }
@@ -71,7 +71,7 @@ func (s *StateData) GuildRemove(guild *discordgo.Guild) error {
 	s.Lock()
 	defer s.Unlock()
 
-	delete(s.guildMap, guild.ID)
+	delete(s.Guilds, guild.ID)
 
 	return nil
 }
@@ -84,7 +84,7 @@ func (s *StateData) Guild(guildID string) (*discordgo.Guild, error) {
 	s.RLock()
 	defer s.RUnlock()
 
-	if g, ok := s.guildMap[guildID]; ok {
+	if g, ok := s.Guilds[guildID]; ok {
 		return g, nil
 	}
 
@@ -104,7 +104,7 @@ func (s *State) UserAdd(user *discordgo.User) error {
 	return nil
 }
 func (s *StateData) memberAdd(member *discordgo.Member) error {
-	members, ok := s.memberMap[member.GuildID]
+	members, ok := s.Members[member.GuildID]
 	if !ok {
 		return ErrStateNotFound
 	}
@@ -145,7 +145,7 @@ func (s *StateData) MemberRemove(member *discordgo.Member) error {
 	s.Lock()
 	defer s.Unlock()
 
-	members, ok := s.memberMap[member.GuildID]
+	members, ok := s.Members[member.GuildID]
 	if !ok {
 		return ErrStateNotFound
 	}
@@ -189,7 +189,7 @@ func (s *StateData) Member(guildID string, userID string) (*discordgo.Member, er
 	s.RLock()
 	defer s.RUnlock()
 
-	members, ok := s.memberMap[guildID]
+	members, ok := s.Members[guildID]
 	if !ok {
 		return nil, ErrStateNotFound
 	}
@@ -553,8 +553,8 @@ func (s *State) CreateNewShard(shardid int) (err error) {
 
 	s.Shards[shardid] = &StateData{
 		MaxMessageCount: 	50,
-		guildMap:           make(map[string]*discordgo.Guild),
-		memberMap:          make(map[string]map[string]*discordgo.Member),
+		Guilds:           make(map[string]*discordgo.Guild),
+		Members:          make(map[string]map[string]*discordgo.Member),
 	}
 
 	return nil
