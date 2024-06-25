@@ -29,7 +29,7 @@ const ShardCount int = 3
 func main() {
 	for i := 0; i < shardCount; i++ {
 		cache.CreateNewShard(i)
-		dg, err := discordgo.New(fmt.Sprintf("Bot %v", Token))
+		dg, err := discordgo.New(fmt.Sprintf("Bot BOT_TOKEN"))
 		if err != nil {
 			fmt.Printf("error when starting shard %d: %s\n", i, err)
 			continue
