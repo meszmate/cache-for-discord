@@ -137,11 +137,6 @@ func (s *StateData) MemberRemove(member *discordgo.Member) error {
 		return ErrNilState
 	}
 
-	guild, err := s.Guild(member.GuildID)
-	if err != nil {
-		return err
-	}
-
 	s.Lock()
 	defer s.Unlock()
 
@@ -156,12 +151,6 @@ func (s *StateData) MemberRemove(member *discordgo.Member) error {
 	}
 	delete(members, member.User.ID)
 
-	for i, m := range guild.Members {
-		if m.User.ID == member.User.ID {
-			guild.Members = append(guild.Members[:i], guild.Members[i+1:]...)
-			return nil
-		}
-	}
 
 	return ErrStateNotFound
 }
