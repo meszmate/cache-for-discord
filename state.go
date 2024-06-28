@@ -8,12 +8,7 @@ import (
 )
 
 var ErrNilState = errors.New("state not instantiated, please use discordgo.New() or assign Session.State")
-
-
 var ErrStateNotFound = errors.New("state cache not found")
-
-
-var ErrMessageIncompletePermissions = errors.New("message incomplete, unable to determine permissions")
 
 type StateData struct {
 	sync.RWMutex
