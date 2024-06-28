@@ -2,7 +2,7 @@
 A better cache for discordgo, memory friendly and good for log systems, this file is similar to the [discordgo](https://github.com/bwmarrin/discordgo) state.go file
 
 ## Installation
-Download the state.go file or use these commands:
+You can use these commands:
 ```go
 go get github.com/meszmate/cache-for-discord
 go get github.com/bwmarrin/discordgo
