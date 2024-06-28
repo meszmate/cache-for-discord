@@ -344,55 +344,6 @@ func (s *StateData) Channel(guildid string, channelID string) (*discordgo.Channe
 	return nil, ErrStateNotFound
 }
 
-
-func (s *StateData) Emoji(guildID, emojiID string) (*discordgo.Emoji, error) {
-	if s == nil {
-		return nil, ErrNilState
-	}
-
-	guild, err := s.Guild(guildID)
-	if err != nil {
-		return nil, err
-	}
-
-	s.RLock()
-	defer s.RUnlock()
-
-	for _, e := range guild.Emojis {
-		if e.ID == emojiID {
-			return e, nil
-		}
-	}
-
-	return nil, ErrStateNotFound
-}
-
-
-func (s *StateData) EmojiAdd(guildID string, emoji *discordgo.Emoji) error {
-	if s == nil {
-		return ErrNilState
-	}
-
-	guild, err := s.Guild(guildID)
-	if err != nil {
-		return err
-	}
-
-	s.Lock()
-	defer s.Unlock()
-
-	for i, e := range guild.Emojis {
-		if e.ID == emoji.ID {
-			guild.Emojis[i] = emoji
-			return nil
-		}
-	}
-
-	guild.Emojis = append(guild.Emojis, emoji)
-	return nil
-}
-
-
 func (s *StateData) MessageAdd(message *discordgo.Message) error {
 	if s == nil {
 		return ErrNilState
