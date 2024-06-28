@@ -50,6 +50,10 @@ func main() {
 		dg.AddHandler(wsHandleChannelUpdate)
 		dg.AddHandler(wsHandleChannelCreate)
 		dg.AddHandler(wsHandleChannelRemove)
+		dg.AddHandler(wsHandleMessageAdd)
+		dg.AddHandler(wsHandleMessageDelete)
+		dg.AddHandler(wsHandleMessageDeleteBulk)
+		dg.AddHandler(wsHandleEmojisUpdate)
 
 		err = dg.Open()
 		if err != nil {
@@ -123,6 +127,20 @@ func wsHandleChannelCreate(s *discordgo.Session, m *discordgo.ChannelCreate) {
 }
 func wsHandleChannelRemove(s *discordgo.Session, m *discordgo.ChannelDelete) {
 	cache.Shards[s.ShardID].ChannelRemove(m.GuildID, m.Channel.ID)
+}
+func wsHandleMessageAdd(s *discordgo.Session, m *discordgo.MessageCreate) {
+	cache.Shards[s.ShardID].MessageAdd(m.Message)
+}
+func wsHandleMessageDelete(s *discordgo.Session, m *discordgo.MessageDelete) {
+	cache.Shards[s.ShardID].MessageRemove(m.GuildID, m.Message)
+}
+func wsHandleMessageDeleteBulk(s *discordgo.Session, m *discordgo.MessageDeleteBulk) {
+        for _, i := range m.Messages{
+	        cache.Shards[s.ShardID].MessageRemove(m.GuildID, i)
+        }
+}
+func wsHandleEmojisUpdate(s *discordgo.Session, m *discordgo.GuildEmojisUpdate){
+        cache.Shards[s.ShardID].EmojisUpdate(m.GuildID, m.Emojis)
 }
 
 // etc...
