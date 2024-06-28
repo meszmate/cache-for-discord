@@ -43,7 +43,27 @@ func (s *StateData) GuildAdd(guild *discordgo.Guild) error {
 		
 	}
 	guild.Members = nil
+	guild.Presences = nil
+	guild.Threads = nil
 	if g, ok := s.Guilds[guild.ID]; ok {
+		if guild.MemberCount == 0 {
+			guild.MemberCount = g.MemberCount
+		}
+		if guild.Roles == nil {
+			guild.Roles = g.Roles
+		}
+		if guild.Emojis == nil {
+			guild.Emojis = g.Emojis
+		}
+		if guild.Members == nil {
+			guild.Members = g.Members
+		}
+		if guild.Channels == nil {
+			guild.Channels = g.Channels
+		}
+		if guild.VoiceStates == nil {
+			guild.VoiceStates = g.VoiceStates
+		}
 		*g = *guild
 		return nil
 	}
@@ -526,7 +546,66 @@ func (s *StateData) Message(guildID string, channelID string, messageID string) 
 
 	return nil, ErrStateNotFound
 }
+func (s *State) Emoji(guildID, emojiID string) (*discordgo.Emoji, error) {
+	if s == nil {
+		return nil, ErrNilState
+	}
 
+	guild, err := s.Guild(guildID)
+	if err != nil {
+		return nil, err
+	}
+
+	s.RLock()
+	defer s.RUnlock()
+
+	for _, e := range guild.Emojis {
+		if e.ID == emojiID {
+			return e, nil
+		}
+	}
+
+	return nil, ErrStateNotFound
+}
+
+func (s *State) EmojiByName(guildID, emojiName string, animated bool) (*discordgo.Emoji, error) {
+	if s == nil {
+		return nil, ErrNilState
+	}
+
+	guild, err := s.Guild(guildID)
+	if err != nil {
+		return nil, err
+	}
+
+	s.RLock()
+	defer s.RUnlock()
+
+	for _, e := range guild.Emojis {
+		if e.Name == emojiName && e.Animated == animated {
+			return e, nil
+		}
+	}
+
+	return nil, ErrStateNotFound
+}
+
+func (s *State) EmojisUpdate(guildID string, emojis []*discordgo.Emoji) error {
+	if s == nil {
+		return ErrNilState
+	}
+
+	guild, err := s.Guild(guildID)
+	if err != nil {
+		return err
+	}
+
+	s.Lock()
+	defer s.Unlock()
+
+	guild.Emojis = emojis
+	return nil
+}
 func (s *State) CreateNewShard(shardid int) (err error) {
 	if s == nil {
 		return ErrNilState
