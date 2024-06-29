@@ -403,10 +403,10 @@ func (s *StateData) MessageRemove(guildID string, message *discordgo.Message) er
 		return ErrNilState
 	}
 
-	return s.messageRemoveByID(guildID, message.ChannelID, message.ID)
+	return s.MessageRemoveByID(guildID, message.ChannelID, message.ID)
 }
 
-func (s *StateData) messageRemoveByID(guildID string, channelID string, messageID string) error {
+func (s *StateData) MessageRemoveByID(guildID string, channelID string, messageID string) error {
 	c, err := s.Channel(guildID, channelID)
 	if err != nil {
 		return err
