@@ -497,7 +497,7 @@ func (s *StateData) Message(guildID string, channelID string, messageID string) 
 
 	return nil, ErrStateNotFound
 }
-func (s *State) Emoji(guildID, emojiID string) (*discordgo.Emoji, error) {
+func (s *StateData) Emoji(guildID, emojiID string) (*discordgo.Emoji, error) {
 	if s == nil {
 		return nil, ErrNilState
 	}
@@ -519,7 +519,7 @@ func (s *State) Emoji(guildID, emojiID string) (*discordgo.Emoji, error) {
 	return nil, ErrStateNotFound
 }
 
-func (s *State) EmojiByName(guildID, emojiName string, animated bool) (*discordgo.Emoji, error) {
+func (s *StateData) EmojiByName(guildID, emojiName string, animated bool) (*discordgo.Emoji, error) {
 	if s == nil {
 		return nil, ErrNilState
 	}
@@ -541,7 +541,7 @@ func (s *State) EmojiByName(guildID, emojiName string, animated bool) (*discordg
 	return nil, ErrStateNotFound
 }
 
-func (s *State) EmojisUpdate(guildID string, emojis []*discordgo.Emoji) error {
+func (s *StateData) EmojisUpdate(guildID string, emojis []*discordgo.Emoji) error {
 	if s == nil {
 		return ErrNilState
 	}
@@ -557,7 +557,7 @@ func (s *State) EmojisUpdate(guildID string, emojis []*discordgo.Emoji) error {
 	guild.Emojis = emojis
 	return nil
 }
-func (s *State) CreateNewShard(shardid int) (data *StateData, err error) {
+func (s *StateData) CreateNewShard(shardid int) (data *StateData, err error) {
 	if s == nil {
 		return nil, ErrNilState
 	}
