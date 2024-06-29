@@ -557,19 +557,20 @@ func (s *State) EmojisUpdate(guildID string, emojis []*discordgo.Emoji) error {
 	guild.Emojis = emojis
 	return nil
 }
-func (s *State) CreateNewShard(shardid int) (err error) {
+func (s *State) CreateNewShard(shardid int) (data *StateData, err error) {
 	if s == nil {
-		return ErrNilState
+		return nil, ErrNilState
 	}
 
 	s.Lock()
 	defer s.Unlock()
 
-	s.Shards[shardid] = &StateData{
+	NewShard := &StateData{
 		MaxMessageCount: 	50,
 		Guilds:           make(map[string]*discordgo.Guild),
 		Members:          make(map[string]map[string]*discordgo.Member),
 	}
+	s.Shards[shardid] = NewShard
 
-	return nil
+	return NewShard, nil
 }
