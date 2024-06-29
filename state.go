@@ -557,7 +557,7 @@ func (s *StateData) EmojisUpdate(guildID string, emojis []*discordgo.Emoji) erro
 	guild.Emojis = emojis
 	return nil
 }
-func (s *StateData) CreateNewShard(shardid int) (data *StateData, err error) {
+func (s *State) CreateNewShard(shardid int) (data *StateData, err error) {
 	if s == nil {
 		return nil, ErrNilState
 	}
