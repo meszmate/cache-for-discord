@@ -21,7 +21,7 @@ import (
 	"syscall"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/meszmate/cache-for-discord"
+	dcache "github.com/meszmate/cache-for-discord"
 )
 var shardSessions = make([]*discordgo.Session, 0)
 var cache *dcache.State = dcache.NewState()
