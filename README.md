@@ -136,7 +136,7 @@ func wsHandleMessageDelete(s *discordgo.Session, m *discordgo.MessageDelete) {
 }
 func wsHandleMessageDeleteBulk(s *discordgo.Session, m *discordgo.MessageDeleteBulk) {
         for _, i := range m.Messages{
-	        cache.Shards[s.ShardID].MessageRemove(m.GuildID, i)
+	        cache.Shards[s.ShardID].MessageRemoveByID(m.GuildID, m.ChannelID, i)
         }
 }
 func wsHandleEmojisUpdate(s *discordgo.Session, m *discordgo.GuildEmojisUpdate){
