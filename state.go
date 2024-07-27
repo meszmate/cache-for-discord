@@ -12,19 +12,20 @@ var ErrStateNotFound = errors.New("state cache not found")
 
 type StateData struct {
 	sync.RWMutex
-	MaxMessageCount    int
-	Guilds   map[string]*discordgo.Guild
-	Members  map[string]map[string]*discordgo.Member
+	MaxMessageCount int
+	PrivateChannels map[string]string
+	Guilds   	map[string]*discordgo.Guild
+	Members  	map[string]map[string]*discordgo.Member
 }
 type State struct {
 	sync.RWMutex
-	Users map[string]*discordgo.User
-	Shards map[int]*StateData
+	Users 		map[string]*discordgo.User
+	Shards 		map[int]*StateData
 }
 
 func NewState() *State {
 	return &State{
-		Users: make(map[string]*discordgo.User),
+		Users: 	make(map[string]*discordgo.User),
 		Shards: make(map[int]*StateData),
 	}
 }
@@ -556,6 +557,41 @@ func (s *StateData) EmojisUpdate(guildID string, emojis []*discordgo.Emoji) erro
 
 	guild.Emojis = emojis
 	return nil
+}
+func (s *StateData) PrivateChannel(userID string) string {
+	if s == nil {
+		return ""
+	}
+	s.RLock()
+	defer s.RUnlock()
+	
+	channel, ok := s.PrivateChannels[userID]
+	if !ok {
+		return ""
+	}
+
+	return channel
+}
+func (s *StateData) AddPrivateChannel(userID, channelID string) error{
+	if s == nil {
+		return ErrNilState
+	}
+	s.RLock()
+	defer s.RUnlock()
+	
+	s.PrivateChannels[userID] = channelID
+	return nil
+}
+func (s *StateData) RemovePrivateChannel(userID string) string {
+	if s == nil {
+		return ErrNilState
+	}
+	s.RLock()
+	defer s.RUnlock()
+	
+	delete(s.PrivateChannels, userID)
+
+	return channel
 }
 func (s *State) CreateNewShard(shardid int) (data *StateData, err error) {
 	if s == nil {
