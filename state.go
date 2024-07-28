@@ -582,16 +582,16 @@ func (s *StateData) AddPrivateChannel(userID, channelID string) error{
 	s.PrivateChannels[userID] = channelID
 	return nil
 }
-func (s *StateData) RemovePrivateChannel(userID string) string {
+func (s *StateData) RemovePrivateChannel(userID string) {
 	if s == nil {
-		return ErrNilState
+		return 
 	}
 	s.RLock()
 	defer s.RUnlock()
 	
 	delete(s.PrivateChannels, userID)
 
-	return channel
+	return 
 }
 func (s *State) CreateNewShard(shardid int) (data *StateData, err error) {
 	if s == nil {
