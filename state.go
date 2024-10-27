@@ -4,7 +4,7 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/bwmarrin/discordgo"
+	"github.com/meszmate/discordgo"
 )
 
 var ErrNilState = errors.New("state not instantiated, please use discordgo.New() or assign Session.State")
