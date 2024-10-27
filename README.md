@@ -5,7 +5,7 @@ A better cache for discordgo, memory friendly and good for log systems, this fil
 You can use these commands:
 ```go
 go get github.com/meszmate/cache-for-discord
-go get github.com/bwmarrin/discordgo
+go get github.com/meszmate/discordgo
 ```
 
 ## Example
@@ -20,7 +20,7 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/bwmarrin/discordgo"
+	"github.com/meszmate/discordgo"
 	dcache "github.com/meszmate/cache-for-discord"
 )
 var shardSessions = make([]*discordgo.Session, 0)
