@@ -20,14 +20,39 @@ type StateData struct {
 type State struct {
 	sync.RWMutex
 	Users 		map[string]*discordgo.User
+	UserNames	map[string]string
 	Shards 		map[int]*StateData
 }
 
 func NewState() *State {
 	return &State{
 		Users: 	make(map[string]*discordgo.User),
+		UserNames: make(map[string]string)
 		Shards: make(map[int]*StateData),
 	}
+}
+
+func (s *State) AddUsername(userid string, username string) error {
+	if s == nil {
+		return ErrNilState
+	}
+
+	s.Lock()
+	defer s.Unlock()
+	s.UserNames[username] = userid
+	return nil
+}
+func (s *State) GetUserID(username string) string {
+	if s == nil {
+		return ""
+	}
+	s.RLock()
+	defer s.RUnlock()
+	id, ok := s.UserNames[username]
+	if !ok{
+		return ""
+	}
+	return id
 }
 
 func (s *StateData) GuildAdd(guild *discordgo.Guild) error {
