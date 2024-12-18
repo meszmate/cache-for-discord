@@ -27,7 +27,7 @@ type State struct {
 func NewState() *State {
 	return &State{
 		Users: 	make(map[string]*discordgo.User),
-		UserNames: make(map[string]string)
+		UserNames: make(map[string]string),
 		Shards: make(map[int]*StateData),
 	}
 }
