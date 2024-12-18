@@ -452,7 +452,7 @@ func (s *StateData) MessageRemoveByID(guildID string, channelID string, messageI
 	return ErrStateNotFound
 }
 
-func (s *StateData) voiceStateUpdate(update *discordgo.VoiceStateUpdate) error {
+func (s *StateData) VoiceStateUpdate(update *discordgo.VoiceStateUpdate) error {
 	guild, err := s.Guild(update.GuildID)
 	if err != nil {
 		return err
